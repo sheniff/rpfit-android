@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RPFit.iml" filepath="$PROJECT_DIR$/RPFit.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rpfit-android.iml" filepath="$PROJECT_DIR$/rpfit-android.iml" />
     </modules>
   </component>
 </project>

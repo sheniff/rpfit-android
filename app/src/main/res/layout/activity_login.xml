@@ -2,8 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="${packageName}.${activityClass}"
-    android:background="@drawable/login_background">
+    tools:context="${packageName}.${activityClass}">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/login_background"
+        android:scaleType="fitXY"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"

@@ -10,17 +10,34 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient.*;
-import com.google.android.gms.plus.PlusClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.plus.Plus;
 
-
-public class LoginActivity extends Activity implements View.OnClickListener, ConnectionCallbacks, OnConnectionFailedListener {
+public class LoginActivity extends Activity implements View.OnClickListener, ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
 
-    private ProgressDialog mConnectionProgressDialog;
-    private PlusClient mPlusClient;
+    /* Request code used to invoke sign in user interactions. */
+    private static final int RC_SIGN_IN = 0;
+
+    /* Client used to interact with Google APIs. */
+    private GoogleApiClient mGoogleApiClient;
+
+    /* A flag indicating that a PendingIntent is in progress and prevents
+     * us from starting further intents.
+     */
+    private boolean mIntentInProgress;
+
+    /* Track whether the sign-in button has been clicked so that we know to resolve
+     * all issues preventing sign-in without waiting.
+     */
+    private boolean mSignInClicked;
+
+    /* Store the connection result from onConnectionFailed callbacks so that we can
+     * resolve them when the user clicks sign-in.
+     */
     private ConnectionResult mConnectionResult;
 
     @Override
@@ -28,11 +45,12 @@ public class LoginActivity extends Activity implements View.OnClickListener, Con
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mPlusClient = new PlusClient.Builder(this, this, this)
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(LoginActivity.this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Plus.API, null)
+                .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .build();
-
-        mConnectionProgressDialog = new ProgressDialog(this);
-        mConnectionProgressDialog.setMessage("Signing in...");
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
     }
@@ -40,67 +58,78 @@ public class LoginActivity extends Activity implements View.OnClickListener, Con
     @Override
     protected void onStart() {
         super.onStart();
-        mPlusClient.connect();
+        mGoogleApiClient.connect();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mPlusClient.disconnect();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    /* A helper method to resolve the current ConnectionResult error. */
+    private void resolveSignInError() {
+        if (mConnectionResult.hasResolution()) {
+            try {
+                mIntentInProgress = true;
+                mConnectionResult.startResolutionForResult(this, RC_SIGN_IN);
+            } catch (IntentSender.SendIntentException e) {
+                // The intent was canceled before it was sent.  Return to the default
+                // state and attempt to connect to get an updated ConnectionResult.
+                mIntentInProgress = false;
+                mGoogleApiClient.connect();
+            }
+        } else {
+            Toast.makeText(this, "Unresolvable error in SignIn...", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-        if (mConnectionProgressDialog.isShowing()) {
-            // El usuario ya ha hecho clic en el botón de inicio de sesión. Empezar a resolver errores de conexión.
-            // Esperar hasta onConnected() para ignorar el diálogo de conexión.
-            if (result.hasResolution()) {
-                try {
-                    result.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
-                } catch (IntentSender.SendIntentException e) {
-                    mPlusClient.connect();
-                }
+        if (!mIntentInProgress) {
+            // Store the ConnectionResult so that we can use it later when the user clicks 'sign-in'.
+            mConnectionResult = result;
+
+            if (mSignInClicked) {
+                // The user has already clicked 'sign-in' so we attempt to resolve all
+                // errors until the user is signed in, or they cancel.
+                resolveSignInError();
             }
         }
-
-        // Guarda el intento para que podamos empezar una actividad cuando el usuario haga clic en el botón de inicio de sesión.
-        mConnectionResult = result;
     }
 
     @Override
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
-        if (requestCode == REQUEST_CODE_RESOLVE_ERR && responseCode == RESULT_OK) {
-            mConnectionResult = null;
-            mPlusClient.connect();
+        if (requestCode == RC_SIGN_IN) {
+            if (responseCode != RESULT_OK) {
+                mSignInClicked = false;
+            }
+
+            mIntentInProgress = false;
+
+            if (!mGoogleApiClient.isConnecting()) {
+                mGoogleApiClient.connect();
+            }
         }
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.sign_in_button && !mPlusClient.isConnected()) {
-            if (mConnectionResult == null) {
-                mConnectionProgressDialog.show();
-            } else {
-                try {
-                    mConnectionResult.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
-                } catch (IntentSender.SendIntentException e) {
-                    // Intenta la conexión de nuevo.
-                    mConnectionResult = null;
-                    mPlusClient.connect();
-                }
-            }
+        if (view.getId() == R.id.sign_in_button && !mGoogleApiClient.isConnecting()) {
+            mSignInClicked = true;
+            resolveSignInError();
         }
     }
 
     @Override
     public void onConnected(Bundle bundle) {
-        // Hemos resuelto todos los errores de conexión.
-        mConnectionProgressDialog.dismiss();
+        mSignInClicked = false;
         Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void onDisconnected() {
-        Log.d(TAG, "disconnected");
+    public void onConnectionSuspended(int cause) {
+        mGoogleApiClient.connect();
     }
 }
