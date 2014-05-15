@@ -1,11 +1,10 @@
 package com.sheniff.rpfit.app;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Toast;
 
@@ -17,7 +16,6 @@ import com.google.android.gms.plus.Plus;
 public class LoginActivity extends Activity implements View.OnClickListener, ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "LoginActivity";
-    private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
 
     /* Request code used to invoke sign in user interactions. */
     private static final int RC_SIGN_IN = 0;
@@ -53,6 +51,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Con
                 .build();
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
+
+        populateLocalForms();
     }
 
     @Override
@@ -69,15 +69,12 @@ public class LoginActivity extends Activity implements View.OnClickListener, Con
         }
     }
 
-    /* A helper method to resolve the current ConnectionResult error. */
     private void resolveSignInError() {
         if (mConnectionResult.hasResolution()) {
             try {
                 mIntentInProgress = true;
                 mConnectionResult.startResolutionForResult(this, RC_SIGN_IN);
             } catch (IntentSender.SendIntentException e) {
-                // The intent was canceled before it was sent.  Return to the default
-                // state and attempt to connect to get an updated ConnectionResult.
                 mIntentInProgress = false;
                 mGoogleApiClient.connect();
             }
@@ -89,12 +86,9 @@ public class LoginActivity extends Activity implements View.OnClickListener, Con
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         if (!mIntentInProgress) {
-            // Store the ConnectionResult so that we can use it later when the user clicks 'sign-in'.
             mConnectionResult = result;
 
             if (mSignInClicked) {
-                // The user has already clicked 'sign-in' so we attempt to resolve all
-                // errors until the user is signed in, or they cancel.
                 resolveSignInError();
             }
         }
@@ -131,5 +125,11 @@ public class LoginActivity extends Activity implements View.OnClickListener, Con
 
     public void onConnectionSuspended(int cause) {
         mGoogleApiClient.connect();
+    }
+
+    private void populateLocalForms() {
+        LoginPagerAdapter adapter = new LoginPagerAdapter();
+        ViewPager pager = (ViewPager) findViewById(R.id.login_viewPager);
+        pager.setAdapter(adapter);
     }
 }
