@@ -25,18 +25,18 @@
             android:inputType="textEmailAddress"
             android:hint="@string/email_placeholder"/>
 
-        <include
+        <com.sheniff.rpfit.app.RevealablePasswordEditText
             android:id="@+id/register_passwordView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            layout="@layout/discoverable_password"/>
+            android:layout_height="match_parent"/>
     </LinearLayout>
 
     <Button
+        android:id="@+id/register_button"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.3"
         android:text="@string/register_button"
-        android:background="@color/common_signin_btn_default_background"
+        android:background="@drawable/red_alpha_button"
         android:textColor="@color/common_signin_btn_dark_text_default"/>
 </LinearLayout>
