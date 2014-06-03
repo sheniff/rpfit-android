@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -15,6 +16,8 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.plus.Plus;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 public class LoginActivity extends Activity implements ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -47,6 +50,8 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, Goog
     private ViewPager pager;
     private Button loginButton;
     private Button registerButton;
+    private EditText loginEmail;
+    private EditText registerEmail;
     private RevealablePasswordEditText loginPassword;
     private RevealablePasswordEditText registerPassword;
     //endregion
@@ -62,15 +67,32 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, Goog
     private View.OnClickListener loginButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            String lePass = loginPassword.getPassword();
-            Log.d(TAG, lePass);
+            String email = loginEmail.getText().toString();
+            String password = loginPassword.getPassword();
+            Log.d(TAG, "Logging in");
+            Log.d(TAG, email);
+            Log.d(TAG, password);
+
+            // login process
+            // AsyncHttpClient...
+            AsyncHttpClient loginClient = new AsyncHttpClient();
+            loginClient.get("http://www.google.com/", new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, org.apache.http.Header[] headers, byte[] responseBody) {
+                    Log.d(TAG, "client response");
+                    Log.d(TAG, responseBody.toString());
+                }
+            });
         }
     };
     private View.OnClickListener registerButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            String lePass = registerPassword.getPassword();
-            Log.d(TAG, lePass);
+            String email = registerEmail.getText().toString();
+            String password = registerPassword.getPassword();
+            Log.d(TAG, "Signing up");
+            Log.d(TAG, email);
+            Log.d(TAG, password);
         }
     };
     //endregion
@@ -96,6 +118,8 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, Goog
         gPlusSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
         loginButton = (Button) findViewById(R.id.login_button);
         registerButton = (Button) findViewById(R.id.register_button);
+        loginEmail = (EditText) findViewById(R.id.login_emailInput);
+        registerEmail = (EditText) findViewById(R.id.register_emailInput);
         loginPassword = (RevealablePasswordEditText) findViewById(R.id.login_passwordView);
         registerPassword = (RevealablePasswordEditText) findViewById(R.id.register_passwordView);
         pager = (ViewPager) findViewById(R.id.login_viewPager);
