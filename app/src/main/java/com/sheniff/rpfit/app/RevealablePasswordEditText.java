@@ -2,7 +2,6 @@ package com.sheniff.rpfit.app;
 
 import android.content.Context;
 import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,11 +23,10 @@ public class RevealablePasswordEditText extends LinearLayout {
     private OnClickListener toggleButtonListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(password.getInputType() == InputType.TYPE_CLASS_TEXT) {
+            if(password.getInputType() == 129) {
                 password.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                password.setTransformationMethod(PasswordTransformationMethod.getInstance());
             } else {
-                password.setInputType(InputType.TYPE_CLASS_TEXT);
+                password.setInputType(129); // === InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD
             }
         }
     };
