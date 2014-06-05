@@ -16,8 +16,11 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.plus.Plus;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LoginActivity extends Activity implements ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -54,6 +57,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, Goog
     private EditText registerEmail;
     private RevealablePasswordEditText loginPassword;
     private RevealablePasswordEditText registerPassword;
+    private SessionManager sessionManager = new SessionManager();
     //endregion
 
     //region Listeners
@@ -67,20 +71,39 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, Goog
     private View.OnClickListener loginButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            String email = loginEmail.getText().toString();
+            String email = "";
             String password = loginPassword.getPassword();
-            Log.d(TAG, "Logging in");
-            Log.d(TAG, email);
-            Log.d(TAG, password);
 
-            // login process
-            // AsyncHttpClient...
-            AsyncHttpClient loginClient = new AsyncHttpClient();
-            loginClient.get("http://www.google.com/", new AsyncHttpResponseHandler() {
+            if (loginEmail.getText() != null) {
+                email = loginEmail.getText().toString();
+            }
+
+            sessionManager.login(email, password, new JsonHttpResponseHandler() {
                 @Override
-                public void onSuccess(int statusCode, org.apache.http.Header[] headers, byte[] responseBody) {
-                    Log.d(TAG, "client response");
-                    Log.d(TAG, responseBody.toString());
+                public void onStart() {
+                    // TODO: show spinner
+                }
+
+                @Override
+                public void onFailure(Throwable e, JSONArray errorResponse) {
+                    // TODO: hide spinner
+                }
+
+                @Override
+                public void onSuccess(JSONObject response) {
+                    Log.d(TAG, "Success");
+                    // TODO: Redirect to dashboard
+                }
+
+                @Override
+                public void onFailure(Throwable e, JSONObject errorResponse) {
+                    Log.d(TAG, "ERROR");
+                    try {
+                        // TODO: Show cool message with error
+                        Log.d(TAG, (String) errorResponse.get("error"));
+                    } catch (JSONException e1) {
+                        Log.d(TAG, e.getMessage());
+                    }
                 }
             });
         }
@@ -88,8 +111,13 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, Goog
     private View.OnClickListener registerButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            String email = registerEmail.getText().toString();
+            String email = "";
             String password = registerPassword.getPassword();
+
+            if (registerEmail.getText() != null) {
+                email = registerEmail.getText().toString();
+            }
+
             Log.d(TAG, "Signing up");
             Log.d(TAG, email);
             Log.d(TAG, password);
