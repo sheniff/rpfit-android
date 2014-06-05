@@ -1,4 +1,4 @@
-package com.sheniff.rpfit.app;
+package com.sheniff.rpfit.app.view;
 
 import android.content.Context;
 import android.text.InputType;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+
+import com.sheniff.rpfit.app.R;
 
 /**
  * Created by sheniff on 5/15/14.

@@ -2,7 +2,6 @@ package com.sheniff.rpfit.app;
 
 import android.util.Log;
 
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -23,8 +22,6 @@ public class SessionManager {
     private JsonHttpResponseHandler loginResponseHandler = new JsonHttpResponseHandler() {
         @Override
         public void onSuccess(JSONObject response) {
-            //ToDo: Add real cookie
-            //cacheCookie();
             super.onSuccess(response);
             responseHandler.onSuccess(response);
             // ToDO: Move it out of here, only for testing purposes...
@@ -49,17 +46,11 @@ public class SessionManager {
             responseHandler.onFinish();
         }
     };
-    private AsyncHttpClient http = new AsyncHttpClient();
     // endregion
 
-    //ToDo
     public boolean isLoggedIn() {
-        return false;
-    }
-
-    //ToDo
-    public void cacheCookie(String loginCookie) {
-
+        String cookie = RpfitRestClient.getCookie("sails.sid");
+        return cookie != null;
     }
 
     public void login(String email, String pass, JsonHttpResponseHandler responseHandler) {
@@ -68,11 +59,11 @@ public class SessionManager {
         params.put("email", email);
         params.put("password", pass);
 
-        http.post("http://192.168.1.149:1337/login.json", params, loginResponseHandler);
+        RpfitRestClient.post("/login.json", params, loginResponseHandler);
     }
 
     public void getUserInfo() {
-        http.get("http://192.168.1.149:1337/user/current", new JsonHttpResponseHandler() {
+        RpfitRestClient.get("/user/current", new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(JSONObject response) {
                 Log.d(TAG, "USER DATA");
@@ -86,6 +77,7 @@ public class SessionManager {
                 } catch (JSONException e1) {
                     Log.d(TAG, e.getMessage());
                 }
+                // ToDo: Re-inflate login activity
             }
         });
     }

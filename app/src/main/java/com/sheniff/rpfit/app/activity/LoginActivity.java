@@ -1,4 +1,4 @@
-package com.sheniff.rpfit.app;
+package com.sheniff.rpfit.app.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,9 +17,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.plus.Plus;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.sheniff.rpfit.app.LoginPagerAdapter;
+import com.sheniff.rpfit.app.R;
+import com.sheniff.rpfit.app.view.RevealablePasswordEditText;
+import com.sheniff.rpfit.app.SessionManager;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends Activity implements ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -101,7 +104,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, Goog
                     try {
                         // TODO: Show cool message with error
                         Log.d(TAG, (String) errorResponse.get("error"));
-                    } catch (JSONException e1) {
+                    } catch (Exception e1) {
                         Log.d(TAG, e.getMessage());
                     }
                 }
@@ -129,6 +132,14 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, Goog
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // if logged in, jump to dashboard activity
+        if (sessionManager.isLoggedIn()) {
+            // TODO: inflate activity? make getUserInfo inside the new activity. Not here...
+            // TODO: return?
+            Log.d(TAG, "User is logged in already!");
+            sessionManager.getUserInfo();
+        }
 
         bindUIElements();
         setUpListeners();
