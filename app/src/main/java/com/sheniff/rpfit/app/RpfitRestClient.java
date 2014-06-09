@@ -8,6 +8,7 @@ import com.loopj.android.http.PersistentCookieStore;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.cookie.BasicClientCookie;
 
 import java.util.List;
 
@@ -42,6 +43,10 @@ public class RpfitRestClient {
         }
 
         return null;
+    }
+
+    public static void deleteCookie(String key) {
+        myCookieStore.addCookie(new BasicClientCookie(key, ""));
     }
 
     private static String getAbsoluteUrl(String relativeUrl) {

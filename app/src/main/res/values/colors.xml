@@ -2,4 +2,5 @@
 <resources>
     <color name="red_button">#FFDD4B39</color>
     <color name="red_pressed_button">#99DD4B39</color>
+    <color name="messageBarTextColor">#FFFFFFFF</color>
 </resources>

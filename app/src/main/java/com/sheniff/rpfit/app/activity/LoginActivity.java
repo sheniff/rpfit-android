@@ -15,14 +15,13 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.plus.Plus;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.sheniff.rpfit.app.LoginPagerAdapter;
 import com.sheniff.rpfit.app.R;
-import com.sheniff.rpfit.app.view.RevealablePasswordEditText;
 import com.sheniff.rpfit.app.SessionManager;
+import com.sheniff.rpfit.app.view.MessagesBarView;
+import com.sheniff.rpfit.app.view.RevealablePasswordEditText;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class LoginActivity extends Activity implements ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -61,6 +60,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, Goog
     private RevealablePasswordEditText loginPassword;
     private RevealablePasswordEditText registerPassword;
     private SessionManager sessionManager = new SessionManager();
+    private MessagesBarView messagesBar;
     //endregion
 
     //region Listeners
@@ -85,28 +85,29 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, Goog
                 @Override
                 public void onStart() {
                     // TODO: show spinner
+                    // messagesBar.show("Logging in...");
                 }
 
                 @Override
-                public void onFailure(Throwable e, JSONArray errorResponse) {
+                public void onFinish() {
                     // TODO: hide spinner
                 }
 
                 @Override
                 public void onSuccess(JSONObject response) {
-                    Log.d(TAG, "Success");
-                    // TODO: Redirect to dashboard
+                    goToDashboard();
                 }
 
                 @Override
                 public void onFailure(Throwable e, JSONObject errorResponse) {
-                    Log.d(TAG, "ERROR");
+                    String errorMessage;
                     try {
-                        // TODO: Show cool message with error
-                        Log.d(TAG, (String) errorResponse.get("error"));
+                        errorMessage = (String) errorResponse.get("error");
                     } catch (Exception e1) {
-                        Log.d(TAG, e.getMessage());
+                        errorMessage = e.getMessage();
                     }
+                    Log.d(TAG, "ERROR! " + errorMessage);
+                    messagesBar.show(errorMessage);
                 }
             });
         }
@@ -135,22 +136,19 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, Goog
 
         // if logged in, jump to dashboard activity
         if (sessionManager.isLoggedIn()) {
-            // TODO: inflate activity? make getUserInfo inside the new activity. Not here...
-            // TODO: return?
-            Log.d(TAG, "User is logged in already!");
-            sessionManager.getUserInfo();
+            this.goToDashboard();
         }
 
         bindUIElements();
         setUpListeners();
 
         populateLocalFormsViewPager();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(LoginActivity.this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Plus.API, null)
-                .addScope(Plus.SCOPE_PLUS_LOGIN)
-                .build();
+//        mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                .addConnectionCallbacks(LoginActivity.this)
+//                .addOnConnectionFailedListener(this)
+//                .addApi(Plus.API, null)
+//                .addScope(Plus.SCOPE_PLUS_LOGIN)
+//                .build();
     }
 
     private void bindUIElements() {
@@ -162,6 +160,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, Goog
         loginPassword = (RevealablePasswordEditText) findViewById(R.id.login_passwordView);
         registerPassword = (RevealablePasswordEditText) findViewById(R.id.register_passwordView);
         pager = (ViewPager) findViewById(R.id.login_viewPager);
+        messagesBar = (MessagesBarView) findViewById(R.id.messages_barView);
     }
 
     private void setUpListeners() {
@@ -173,16 +172,16 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, Goog
     @Override
     protected void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
+//        mGoogleApiClient.connect();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-    }
+    //@Override
+    // protected void onStop() {
+    //    super.onStop();
+    //    if (mGoogleApiClient.isConnected()) {
+    //        mGoogleApiClient.disconnect();
+    //    }
+    //}
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
@@ -237,5 +236,11 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, Goog
     private void populateLocalFormsViewPager() {
         LoginPagerAdapter adapter = new LoginPagerAdapter();
         pager.setAdapter(adapter);
+    }
+
+    private void goToDashboard() {
+        Intent intent = new Intent(this, DashboardActivity.class);
+        startActivity(intent);
+        LoginActivity.this.finish();
     }
 }

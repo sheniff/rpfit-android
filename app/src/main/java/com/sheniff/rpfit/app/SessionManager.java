@@ -1,15 +1,12 @@
 package com.sheniff.rpfit.app;
 
-import android.util.Log;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by sheniff on 6/4/14.
+ * Created by sheniff on 6/4/14.u
  */
 public class SessionManager {
 
@@ -24,8 +21,6 @@ public class SessionManager {
         public void onSuccess(JSONObject response) {
             super.onSuccess(response);
             responseHandler.onSuccess(response);
-            // ToDO: Move it out of here, only for testing purposes...
-            getUserInfo();
         }
 
         @Override
@@ -50,7 +45,7 @@ public class SessionManager {
 
     public boolean isLoggedIn() {
         String cookie = RpfitRestClient.getCookie("sails.sid");
-        return cookie != null;
+        return cookie != null && !cookie.equals("");
     }
 
     public void login(String email, String pass, JsonHttpResponseHandler responseHandler) {
@@ -62,23 +57,12 @@ public class SessionManager {
         RpfitRestClient.post("/login.json", params, loginResponseHandler);
     }
 
-    public void getUserInfo() {
-        RpfitRestClient.get("/user/current", new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                Log.d(TAG, "USER DATA");
-            }
+    public void logout(JsonHttpResponseHandler responseHandler) {
+        RpfitRestClient.get("/logout.json", responseHandler);
+    }
 
-            @Override
-            public void onFailure(Throwable e, JSONObject errorResponse) {
-                Log.d(TAG, "ERROR");
-                try {
-                    Log.d(TAG, errorResponse.getString("message"));
-                } catch (JSONException e1) {
-                    Log.d(TAG, e.getMessage());
-                }
-                // ToDo: Re-inflate login activity
-            }
-        });
+    // ToDo: This should go to User Class?
+    public void getUserInfo(JsonHttpResponseHandler responseHandler) {
+        RpfitRestClient.get("/user/current", responseHandler);
     }
 }
