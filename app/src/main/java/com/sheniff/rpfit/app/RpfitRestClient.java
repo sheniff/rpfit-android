@@ -14,7 +14,8 @@ import java.util.List;
 
 public class RpfitRestClient {
     private static final String TAG = "RpfitRestClient";
-    private static final String BASE_URL = "http://10.73.197.254:1337";
+    private static final String DOMAIN = "10.73.197.254";
+    private static final String BASE_URL = "http://" + DOMAIN + ":1337";
 
     private static AsyncHttpClient client = new AsyncHttpClient();
     private static PersistentCookieStore myCookieStore;
@@ -43,6 +44,10 @@ public class RpfitRestClient {
         }
 
         return null;
+    }
+
+    public static void clearCookies() {
+        myCookieStore.clear();
     }
 
     public static void deleteCookie(String key) {

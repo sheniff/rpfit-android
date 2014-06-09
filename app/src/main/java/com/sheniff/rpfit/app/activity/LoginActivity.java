@@ -74,57 +74,13 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, Goog
     private View.OnClickListener loginButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            String email = "";
-            String password = loginPassword.getPassword();
-
-            if (loginEmail.getText() != null) {
-                email = loginEmail.getText().toString();
-            }
-
-            sessionManager.login(email, password, new JsonHttpResponseHandler() {
-                @Override
-                public void onStart() {
-                    // TODO: show spinner
-                    // messagesBar.show("Logging in...");
-                }
-
-                @Override
-                public void onFinish() {
-                    // TODO: hide spinner
-                }
-
-                @Override
-                public void onSuccess(JSONObject response) {
-                    goToDashboard();
-                }
-
-                @Override
-                public void onFailure(Throwable e, JSONObject errorResponse) {
-                    String errorMessage;
-                    try {
-                        errorMessage = (String) errorResponse.get("error");
-                    } catch (Exception e1) {
-                        errorMessage = e.getMessage();
-                    }
-                    Log.d(TAG, "ERROR! " + errorMessage);
-                    messagesBar.show(errorMessage);
-                }
-            });
+            login();
         }
     };
     private View.OnClickListener registerButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            String email = "";
-            String password = registerPassword.getPassword();
-
-            if (registerEmail.getText() != null) {
-                email = registerEmail.getText().toString();
-            }
-
-            Log.d(TAG, "Signing up");
-            Log.d(TAG, email);
-            Log.d(TAG, password);
+            register();
         }
     };
     //endregion
@@ -242,5 +198,57 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, Goog
         Intent intent = new Intent(this, DashboardActivity.class);
         startActivity(intent);
         LoginActivity.this.finish();
+    }
+
+    private void login() {
+        String email = "";
+        String password = loginPassword.getPassword();
+
+        if (loginEmail.getText() != null) {
+            email = loginEmail.getText().toString();
+        }
+
+        sessionManager.login(email, password, new JsonHttpResponseHandler() {
+            @Override
+            public void onStart() {
+                // TODO: show spinner
+                // messagesBar.show("Logging in...");
+            }
+
+            @Override
+            public void onFinish() {
+                // TODO: hide spinner
+            }
+
+            @Override
+            public void onSuccess(JSONObject response) {
+                goToDashboard();
+            }
+
+            @Override
+            public void onFailure(Throwable e, JSONObject errorResponse) {
+                String errorMessage;
+                try {
+                    errorMessage = (String) errorResponse.get("error");
+                } catch (Exception e1) {
+                    errorMessage = e.getMessage();
+                }
+                Log.d(TAG, "ERROR! " + errorMessage);
+                messagesBar.show(errorMessage);
+            }
+        });
+    }
+
+    private void register() {
+        String email = "";
+        String password = registerPassword.getPassword();
+
+        if (registerEmail.getText() != null) {
+            email = registerEmail.getText().toString();
+        }
+
+        Log.d(TAG, "Signing up");
+        Log.d(TAG, email);
+        Log.d(TAG, password);
     }
 }

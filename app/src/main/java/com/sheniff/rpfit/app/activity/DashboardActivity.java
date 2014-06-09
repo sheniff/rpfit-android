@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.sheniff.rpfit.app.R;
 import com.sheniff.rpfit.app.SessionManager;
 import com.sheniff.rpfit.app.view.MessagesBarView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -24,31 +26,18 @@ public class DashboardActivity extends Activity {
     // region Variables
     SessionManager sessionManager = new SessionManager();
     private MessagesBarView messagesBar;
+    private TextView tmpTitle;
     // endregion
 
     // region Listeners
     // endregion
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        sessionManager.getUserInfo(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                Log.d(TAG, "USER DATA");
-            }
-
-            @Override
-            public void onFailure(Throwable e, JSONObject errorResponse) {
-                showError(e, errorResponse);
-                if(sessionManager.isLoggedIn()) {
-                    logout();
-                }
-            }
-        });
+        fetchUser();
 
         bindUIElements();
         setUpListeners();
@@ -56,6 +45,7 @@ public class DashboardActivity extends Activity {
 
     private void bindUIElements() {
         messagesBar = (MessagesBarView) findViewById(R.id.messages_barView);
+        tmpTitle = (TextView) findViewById(R.id.tmpTitleView);
     }
 
     private void setUpListeners() {
@@ -90,5 +80,26 @@ public class DashboardActivity extends Activity {
         }
         Log.d(TAG, "ERROR! " + errorMessage);
         messagesBar.show(errorMessage);
+    }
+
+    private void fetchUser() {
+        sessionManager.getUserInfo(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    tmpTitle.setText(response.getString("name"));
+                } catch (JSONException e) {
+                    tmpTitle.setText("<no name>");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable e, JSONObject errorResponse) {
+                showError(e, errorResponse);
+                if(sessionManager.isLoggedIn()) {
+                    logout();
+                }
+            }
+        });
     }
 }
