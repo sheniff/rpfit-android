@@ -14,7 +14,7 @@ import java.util.List;
 
 public class RpfitRestClient {
     private static final String TAG = "RpfitRestClient";
-    private static final String DOMAIN = "10.73.197.254";
+    private static final String DOMAIN = "192.168.1.149";
     private static final String BASE_URL = "http://" + DOMAIN + ":1337";
 
     private static AsyncHttpClient client = new AsyncHttpClient();

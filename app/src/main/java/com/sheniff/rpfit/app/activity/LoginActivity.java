@@ -195,7 +195,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, Goog
     }
 
     private void goToDashboard() {
-        Intent intent = new Intent(this, DashboardActivity.class);
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
         LoginActivity.this.finish();
     }

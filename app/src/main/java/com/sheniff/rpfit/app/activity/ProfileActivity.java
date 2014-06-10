@@ -4,29 +4,34 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.sheniff.rpfit.app.R;
+import com.sheniff.rpfit.app.RpfitRestClient;
 import com.sheniff.rpfit.app.SessionManager;
 import com.sheniff.rpfit.app.view.MessagesBarView;
+import com.sheniff.rpfit.app.view.ProfileCategoryView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by sheniff on 6/9/14.
  */
-public class DashboardActivity extends Activity {
+public class ProfileActivity extends Activity {
 
     // region Constants
-    private static final String TAG = "DashboardActivity";
+    private static final String TAG = "ProfileActivity";
     // endregion
 
     // region Variables
     SessionManager sessionManager = new SessionManager();
     private MessagesBarView messagesBar;
     private TextView tmpTitle;
+    private LinearLayout categoryList;
     // endregion
 
     // region Listeners
@@ -35,7 +40,7 @@ public class DashboardActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+        setContentView(R.layout.activity_profile);
 
         fetchUser();
 
@@ -46,6 +51,7 @@ public class DashboardActivity extends Activity {
     private void bindUIElements() {
         messagesBar = (MessagesBarView) findViewById(R.id.messages_barView);
         tmpTitle = (TextView) findViewById(R.id.tmpTitleView);
+        categoryList = (LinearLayout) findViewById(R.id.categoryList);
     }
 
     private void setUpListeners() {
@@ -55,6 +61,7 @@ public class DashboardActivity extends Activity {
         sessionManager.logout(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(JSONObject response) {
+                RpfitRestClient.clearCookies();
                 goToLogin();
             }
 
@@ -88,6 +95,7 @@ public class DashboardActivity extends Activity {
             public void onSuccess(JSONObject response) {
                 try {
                     tmpTitle.setText(response.getString("name"));
+                    printCategories(response.getJSONArray("xps"));
                 } catch (JSONException e) {
                     tmpTitle.setText("<no name>");
                 }
@@ -101,5 +109,17 @@ public class DashboardActivity extends Activity {
                 }
             }
         });
+    }
+
+    private void printCategories(JSONArray categories) throws JSONException {
+        for (int i = 0; i < categories.length(); i++) {
+            JSONObject category = categories.getJSONObject(i).getJSONObject("category");
+
+            ProfileCategoryView categoryView = new ProfileCategoryView(this);
+            categoryView.setName(category.getString("name"));
+            //categoryView.setLevel(category.getString("level"));
+
+            categoryList.addView(categoryView);
+        }
     }
 }

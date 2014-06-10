@@ -7,5 +7,7 @@
     <string name="login_button">Log in</string>
     <string name="register_button">Register</string>
     <string name="name_placeholder">Name</string>
+    <string name="categoryNamePlaceholder"><![CDATA[<Category>]]></string>
+    <string name="levelAbbrev">Lvl.</string>
 
 </resources>
