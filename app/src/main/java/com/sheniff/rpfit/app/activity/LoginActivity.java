@@ -16,9 +16,9 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.sheniff.rpfit.app.LoginPagerAdapter;
+import com.sheniff.rpfit.app.adapter.LoginPagerAdapter;
 import com.sheniff.rpfit.app.R;
-import com.sheniff.rpfit.app.SessionManager;
+import com.sheniff.rpfit.app.api.SessionManager;
 import com.sheniff.rpfit.app.view.MessagesBarView;
 import com.sheniff.rpfit.app.view.RevealablePasswordEditText;
 

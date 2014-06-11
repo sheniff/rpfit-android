@@ -4,19 +4,24 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.sheniff.rpfit.app.Category;
 import com.sheniff.rpfit.app.R;
-import com.sheniff.rpfit.app.RpfitRestClient;
-import com.sheniff.rpfit.app.SessionManager;
+import com.sheniff.rpfit.app.RetrieveImage;
+import com.sheniff.rpfit.app.adapter.CategoryArrayAdapter;
+import com.sheniff.rpfit.app.api.RpfitRestClient;
+import com.sheniff.rpfit.app.api.SessionManager;
 import com.sheniff.rpfit.app.view.MessagesBarView;
-import com.sheniff.rpfit.app.view.ProfileCategoryView;
+import com.sheniff.rpfit.app.view.RoundedImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by sheniff on 6/9/14.
@@ -31,7 +36,10 @@ public class ProfileActivity extends Activity {
     SessionManager sessionManager = new SessionManager();
     private MessagesBarView messagesBar;
     private TextView tmpTitle;
-    private LinearLayout categoryList;
+    private RoundedImageView profilePicture;
+    private ListView categoryListView;
+    private CategoryArrayAdapter categoryAdapter;
+    private ArrayList<Category> categoryList = new ArrayList<Category>();
     // endregion
 
     // region Listeners
@@ -46,15 +54,23 @@ public class ProfileActivity extends Activity {
 
         bindUIElements();
         setUpListeners();
+        setUpAdapter();
     }
 
     private void bindUIElements() {
         messagesBar = (MessagesBarView) findViewById(R.id.messages_barView);
         tmpTitle = (TextView) findViewById(R.id.tmpTitleView);
-        categoryList = (LinearLayout) findViewById(R.id.categoryList);
+        profilePicture = (RoundedImageView) findViewById(R.id.profile_pictureView);
+        categoryListView = (ListView) findViewById(R.id.categoryList);
     }
 
     private void setUpListeners() {
+    }
+
+    private void setUpAdapter() {
+        categoryAdapter = new CategoryArrayAdapter(this, categoryList);
+        categoryListView.setAdapter(categoryAdapter);
+        categoryListView.setDivider(null);
     }
 
     private void logout() {
@@ -95,7 +111,9 @@ public class ProfileActivity extends Activity {
             public void onSuccess(JSONObject response) {
                 try {
                     tmpTitle.setText(response.getString("name"));
+                    printPicture("https://pbs.twimg.com/profile_images/2677851365/21b86d4edc88250e6e9ecd9fcff29443.jpeg");
                     printCategories(response.getJSONArray("xps"));
+                    categoryAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     tmpTitle.setText("<no name>");
                 }
@@ -113,13 +131,11 @@ public class ProfileActivity extends Activity {
 
     private void printCategories(JSONArray categories) throws JSONException {
         for (int i = 0; i < categories.length(); i++) {
-            JSONObject category = categories.getJSONObject(i).getJSONObject("category");
-
-            ProfileCategoryView categoryView = new ProfileCategoryView(this);
-            categoryView.setName(category.getString("name"));
-            //categoryView.setLevel(category.getString("level"));
-
-            categoryList.addView(categoryView);
+            categoryList.add(new Category(categories.getJSONObject(i)));
         }
+    }
+
+    private void printPicture(String src) {
+        new RetrieveImage(profilePicture).execute(src);
     }
 }

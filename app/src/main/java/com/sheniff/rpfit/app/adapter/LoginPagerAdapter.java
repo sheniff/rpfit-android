@@ -1,7 +1,9 @@
-package com.sheniff.rpfit.app;
+package com.sheniff.rpfit.app.adapter;
 
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
+
+import com.sheniff.rpfit.app.R;
 
 /**
  * Created by sheniff on 5/13/14.

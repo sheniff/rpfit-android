@@ -1,7 +1,8 @@
-package com.sheniff.rpfit.app;
+package com.sheniff.rpfit.app.api;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.sheniff.rpfit.app.api.RpfitRestClient;
 
 import org.json.JSONObject;
 
