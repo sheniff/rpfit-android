@@ -2,6 +2,7 @@ package com.sheniff.rpfit.app.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
@@ -136,6 +137,12 @@ public class ProfileActivity extends Activity {
     }
 
     private void printPicture(String src) {
-        new RetrieveImage(profilePicture).execute(src);
+        new RetrieveImage() {
+            @Override
+            protected void onPostExecute(Bitmap bitmap) {
+                super.onPostExecute(bitmap);
+                profilePicture.setImageBitmap(bitmap);
+            }
+        }.execute(src);
     }
 }

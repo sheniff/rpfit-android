@@ -36,9 +36,13 @@ public class RoundedImageView extends ImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        rect = new RectF(0, 0, this.getWidth(), this.getHeight());
-        clipPath.addRoundRect(rect, radius, radius, Path.Direction.CW);
-        canvas.clipPath(clipPath);
+        if (this.getWidth() != 0 && this.getHeight() != 0) {
+            rect = new RectF(0, 0, this.getWidth(), this.getHeight());
+        }
+        if (rect != null) {
+            clipPath.addRoundRect(rect, radius, radius, Path.Direction.CW);
+            canvas.clipPath(clipPath);
+        }
         super.onDraw(canvas);
     }
 }
