@@ -37,19 +37,11 @@
         </android.support.v4.view.ViewPager>
     </LinearLayout>
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/sign_in_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp" />
-
-    <com.sheniff.rpfit.app.view.MessagesBarView
+    <com.sheniff.rpfit.app.views.MessagesBarView
         android:id="@+id/messages_barView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone">
-    </com.sheniff.rpfit.app.view.MessagesBarView>
+    </com.sheniff.rpfit.app.views.MessagesBarView>
 
 </RelativeLayout>

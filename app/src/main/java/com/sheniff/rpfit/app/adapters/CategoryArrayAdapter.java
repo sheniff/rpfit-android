@@ -1,4 +1,4 @@
-package com.sheniff.rpfit.app.adapter;
+package com.sheniff.rpfit.app.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.sheniff.rpfit.app.Category;
+import com.sheniff.rpfit.app.models.Category;
 import com.sheniff.rpfit.app.R;
 
 import java.util.List;

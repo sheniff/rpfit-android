@@ -1,4 +1,4 @@
-package com.sheniff.rpfit.app.activity;
+package com.sheniff.rpfit.app.activities;
 
 import android.app.Activity;
 import android.os.Bundle;

@@ -1,22 +1,21 @@
-package com.sheniff.rpfit.app.activity;
+package com.sheniff.rpfit.app.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.sheniff.rpfit.app.Category;
 import com.sheniff.rpfit.app.R;
-import com.sheniff.rpfit.app.RetrieveImage;
-import com.sheniff.rpfit.app.adapter.CategoryArrayAdapter;
+import com.sheniff.rpfit.app.adapters.CategoryArrayAdapter;
 import com.sheniff.rpfit.app.api.RpfitRestClient;
 import com.sheniff.rpfit.app.api.SessionManager;
-import com.sheniff.rpfit.app.view.MessagesBarView;
-import com.sheniff.rpfit.app.view.RoundedImageView;
+import com.sheniff.rpfit.app.models.Category;
+import com.sheniff.rpfit.app.views.MessagesBarView;
+import com.sheniff.rpfit.app.views.RoundedImageView;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,9 +23,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by sheniff on 6/9/14.
- */
 public class ProfileActivity extends Activity {
 
     // region Constants
@@ -40,7 +36,7 @@ public class ProfileActivity extends Activity {
     private RoundedImageView profilePicture;
     private ListView categoryListView;
     private CategoryArrayAdapter categoryAdapter;
-    private ArrayList<Category> categoryList = new ArrayList<Category>();
+    private ArrayList<Category> categoryList = new ArrayList<>();
     // endregion
 
     // region Listeners
@@ -112,7 +108,7 @@ public class ProfileActivity extends Activity {
             public void onSuccess(JSONObject response) {
                 try {
                     tmpTitle.setText(response.getString("name"));
-                    printPicture("https://pbs.twimg.com/profile_images/2677851365/21b86d4edc88250e6e9ecd9fcff29443.jpeg");
+                    Picasso.with(ProfileActivity.this).load("https://pbs.twimg.com/profile_images/2677851365/21b86d4edc88250e6e9ecd9fcff29443.jpeg").into(profilePicture);
                     printCategories(response.getJSONArray("xps"));
                     categoryAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
@@ -134,15 +130,5 @@ public class ProfileActivity extends Activity {
         for (int i = 0; i < categories.length(); i++) {
             categoryList.add(new Category(categories.getJSONObject(i)));
         }
-    }
-
-    private void printPicture(String src) {
-        new RetrieveImage() {
-            @Override
-            protected void onPostExecute(Bitmap bitmap) {
-                super.onPostExecute(bitmap);
-                profilePicture.setImageBitmap(bitmap);
-            }
-        }.execute(src);
     }
 }

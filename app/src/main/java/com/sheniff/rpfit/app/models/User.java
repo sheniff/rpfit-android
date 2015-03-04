@@ -1,4 +1,4 @@
-package com.sheniff.rpfit.app;
+package com.sheniff.rpfit.app.models;
 
 /**
  * Created by sheniff on 6/4/14.

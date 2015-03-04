@@ -8,7 +8,7 @@
     android:background="@color/red_button"
     android:padding="10dp">
 
-    <com.sheniff.rpfit.app.view.CircularTimerView
+    <com.sheniff.rpfit.app.views.CircularTimerView
         android:id="@+id/messageBarCirclularTimerView"
         android:layout_width="@dimen/messageBarCircularTimerSize"
         android:layout_height="@dimen/messageBarCircularTimerSize"

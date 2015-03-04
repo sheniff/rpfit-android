@@ -1,11 +1,10 @@
-package com.sheniff.rpfit.app;
+package com.sheniff.rpfit.app.models;
+
+import com.sheniff.rpfit.app.UIUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by sheniff on 6/11/14.
- */
 public class Category {
 
     private String id;

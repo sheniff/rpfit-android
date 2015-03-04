@@ -1,4 +1,4 @@
-package com.sheniff.rpfit.app.view;
+package com.sheniff.rpfit.app.views;
 
 import android.content.Context;
 import android.text.InputType;
