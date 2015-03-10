@@ -1,7 +1,6 @@
 package com.sheniff.rpfit.app.activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
@@ -10,7 +9,6 @@ import android.widget.TextView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.sheniff.rpfit.app.R;
 import com.sheniff.rpfit.app.adapters.CategoryArrayAdapter;
-import com.sheniff.rpfit.app.api.RpfitRestClient;
 import com.sheniff.rpfit.app.api.SessionManager;
 import com.sheniff.rpfit.app.models.Category;
 import com.sheniff.rpfit.app.views.MessagesBarView;
@@ -70,27 +68,6 @@ public class ProfileActivity extends Activity {
         categoryListView.setDivider(null);
     }
 
-    private void logout() {
-        sessionManager.logout(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                RpfitRestClient.clearCookies();
-                goToLogin();
-            }
-
-            @Override
-            public void onFailure(Throwable e, JSONObject errorResponse) {
-                showError(e, errorResponse);
-            }
-        });
-    }
-
-    private void goToLogin() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
     private void showError(Throwable e, JSONObject errorResponse) {
         String errorMessage;
         try {
@@ -102,6 +79,7 @@ public class ProfileActivity extends Activity {
         messagesBar.show(errorMessage);
     }
 
+    // ToDo: modify to use ParseUser...
     private void fetchUser() {
         sessionManager.getUserInfo(new JsonHttpResponseHandler() {
             @Override
@@ -119,9 +97,6 @@ public class ProfileActivity extends Activity {
             @Override
             public void onFailure(Throwable e, JSONObject errorResponse) {
                 showError(e, errorResponse);
-                if(sessionManager.isLoggedIn()) {
-                    logout();
-                }
             }
         });
     }

@@ -1,8 +1,24 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="ToggleButton">
+        <item name="android:background">@drawable/toggle_btn_bg</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@drawable/toggle_btn_txt</item>
+        <item name="android:layout_marginLeft">1dp</item>
+        <item name="android:layout_marginRight">1dp</item>
+    </style>
+    
+    <style name="DayMarker">
+        <item name="android:background">@drawable/day_marker_bg</item>
+        <item name="android:textColor">@drawable/day_marker_txt</item>
+        <item name="android:gravity">center</item>
+    </style>
 </resources>

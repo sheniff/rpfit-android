@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="16dp">
+
+    <TextView
+        android:id="@+id/tvSessionName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Session #?"
+        android:layout_marginLeft="16dp" />
+
+    <TextView
+        android:id="@+id/tvSessionNumExercises"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(0 Exercises)"
+        android:layout_toRightOf="@id/tvSessionName"
+        android:layout_marginLeft="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/tvSessionName"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight=".1428"
+            android:layout_height="wrap_content"
+            android:text="Mon"
+            android:id="@+id/tvMonday"
+            style="@style/DayMarker" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight=".1428"
+            android:layout_height="wrap_content"
+            android:text="Tue"
+            android:id="@+id/tvTuesday"
+            style="@style/DayMarker" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight=".1428"
+            android:layout_height="wrap_content"
+            android:text="Wed"
+            android:id="@+id/tvWednesday"
+            style="@style/DayMarker" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight=".1428"
+            android:layout_height="wrap_content"
+            android:text="Thu"
+            android:id="@+id/tvThursday"
+            style="@style/DayMarker" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight=".1428"
+            android:layout_height="wrap_content"
+            android:text="Fri"
+            android:id="@+id/tvFriday"
+            style="@style/DayMarker" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight=".1428"
+            android:layout_height="wrap_content"
+            android:text="Sat"
+            android:id="@+id/tvSaturday"
+            style="@style/DayMarker" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight=".1428"
+            android:layout_height="wrap_content"
+            android:text="Sun"
+            android:id="@+id/tvSunday"
+            style="@style/DayMarker" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -12,9 +12,6 @@ import com.sheniff.rpfit.app.R;
 
 import java.util.List;
 
-/**
- * Created by sheniff on 6/10/14.
- */
 public class CategoryArrayAdapter extends ArrayAdapter<Category> {
     private static final int RESOURCE = R.layout.profile_category;
     private final Context context;

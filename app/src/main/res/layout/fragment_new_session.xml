@@ -1,0 +1,115 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.sheniff.rpfit.app.fragments.NewSessionFragment">
+
+    <EditText
+        android:id="@+id/etSessionName"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:hint="Session #..." />
+
+    <LinearLayout
+        android:id="@+id/llDows"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/etSessionName">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight=".1428"
+            android:layout_height="wrap_content"
+            android:text="Mon"
+            android:id="@+id/tbMonday"
+            style="@style/ToggleButton" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight=".1428"
+            android:layout_height="wrap_content"
+            android:text="Tue"
+            android:id="@+id/tbTuesday"
+            style="@style/ToggleButton" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight=".1428"
+            android:layout_height="wrap_content"
+            android:text="Wed"
+            android:id="@+id/tbWednesday"
+            style="@style/ToggleButton" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight=".1428"
+            android:layout_height="wrap_content"
+            android:text="Thu"
+            android:id="@+id/tbThursday"
+            style="@style/ToggleButton" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight=".1428"
+            android:layout_height="wrap_content"
+            android:text="Fri"
+            android:id="@+id/tbFriday"
+            style="@style/ToggleButton" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight=".1428"
+            android:layout_height="wrap_content"
+            android:text="Sat"
+            android:id="@+id/tbSaturday"
+            style="@style/ToggleButton" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight=".1428"
+            android:layout_height="wrap_content"
+            android:text="Sun"
+            android:id="@+id/tbSunday"
+            style="@style/ToggleButton" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnAddExercise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Exercise"
+        android:layout_below="@id/llDows"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ListView
+        android:id="@+id/lvExercises"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnAddExercise"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/btnCreateSession"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/btnCreateSession"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>

@@ -26,4 +26,5 @@ dependencies {
     compile 'com.parse.bolts:bolts-android:1.1.4'
     compile files('libs/android-async-http-1.4.4.jar')
     compile files('libs/Parse-1.8.3.jar')
+    compile "com.android.support:appcompat-v7:21.0.3"
 }
